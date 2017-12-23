@@ -29,7 +29,7 @@
         </div>
 
         <div id="treeview-list">
-          <ul ng-repeat="item in mc.withParentItems() | filter: mc.search">
+          <ul ng-repeat="item in mc.items | filter: mc.search">
             <li id={{item.id}} class="item">
               <span ng-repeat="space in item.parents">
                 &nbsp;&nbsp;

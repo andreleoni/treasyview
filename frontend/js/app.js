@@ -2,57 +2,18 @@ var app = angular.module("treasyViewApp", []);
 
 app.controller('mainController', function($http) {
   var mc = this;
-  // $http.get('https://jsonplaceholder.typicode.com/posts', {}).then(function(response) {
-  //   mc.posts = response.data;
-  // })
+  mc.items = [];
 
-  this.items = [
-    {
-      id: 1,
-      title: "Pasta 1",
-      parent_id: undefined,
-      collapsed: false
-    },
-    {
-      id: 2,
-      title: "Pasta 2",
-      parent_id: 1,
-      collapsed: false
-    },
-    {
-      id: 3,
-      title: "Pasta 3",
-      parent_id: 1,
-      collapsed: true,
-    },
-    {
-      id: 4,
-      title: "Pasta 4",
-      parent_id: 3,
-      collapsed: true
-    },
-    {
-      id: 5,
-      title: "Pasta 1",
-      parent_id: undefined,
-      collapsed: true
-    },
-    {
-      id: 6,
-      title: "Pasta 6",
-      parent_id: 2,
-      collapsed: true
-    }
-  ]
+  $http.get('http://localhost:3000/items', { format: 'json' }).then(function(response) {
+    var items = response.data;
+    mc.items = response.data;
 
-  this.withParentItems = function() {
-    var items = this.items;
     items.map(function(item, key) {
-        items[key].parents = mc.getTreeviewFathers(item);
-      });
+      items[key].parents = mc.getTreeviewFathers(item);
+    });
 
-    return items;
-  }
+    mc.items = items;
+  });
 
   this.treeviewItemCreate = function() {
     alert("create_new");
@@ -75,25 +36,38 @@ app.controller('mainController', function($http) {
   }
 
   this.getTreeviewFathers = function(item) {
-    var items = this.items;
+    var items = mc.items;
     var parents = [];
+    var have_a_parent_id;
+    var parent_id;
+    var counter = 0;
 
-    if (isNaN(item.parent_id)) {
+    parent_id = item.parent_id;
+
+    if (isNaN(parent_id) || parent_id == null) {
       return parents;
     } else {
-      var parent_id = item.parent_id;
-
       do {
+        counter = counter + 1;
+
         for(current_item in items) {
-          var have_a_parent_id = false;
+          have_a_parent_id = false;
 
           if (parent_id == items[current_item].id) {
             have_a_parent_id = true;
-            parents.push(parent_id);
-            parent_id = items[current_item].parent_id;
+
+            if (parents.indexOf(parent_id) == -1) {
+              parents.push(parent_id);
+              parent_id = items[current_item].parent_id;
+            } else {
+              parent_id = undefined;
+            }
+
             break;
           }
         }
+
+        if (items.length <= counter) have_a_parent_id = false;
       } while (have_a_parent_id != false);
     }
 
