@@ -1,7 +1,7 @@
 var app = angular.module("treasyViewApp", []);
 
 app.controller('mainController', function($http) {
-  // var mc = this;
+  var mc = this;
   // $http.get('https://jsonplaceholder.typicode.com/posts', {}).then(function(response) {
   //   mc.posts = response.data;
   // })
@@ -44,6 +44,15 @@ app.controller('mainController', function($http) {
       collapsed: true
     }
   ]
+
+  this.withParentItems = function() {
+    var items = this.items;
+    items.map(function(item, key) {
+        items[key].parents = mc.getTreeviewFathers(item);
+      });
+
+    return items;
+  }
 
   this.treeviewItemCreate = function() {
     alert("create_new");

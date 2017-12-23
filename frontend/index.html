@@ -29,10 +29,13 @@
         </div>
 
         <div id="treeview-list">
-          <ul ng-repeat="item in mc.items | filter: mc.search">
+          <ul ng-repeat="item in mc.withParentItems() | filter: mc.search">
             <li id={{item.id}} class="item">
+              <span ng-repeat="space in item.parents">
+                &nbsp;&nbsp;
+              </span>
+
               <div class="{{item.collapsed ? 'arrow-up' : 'arrow-down'}}"></div>
-              {{mc.getTreeviewFathers(item)}}
               {{item.title}}
             </li>
           </ul>
