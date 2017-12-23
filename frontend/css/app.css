@@ -1,0 +1,96 @@
+body {
+  background-color: #f3f3f3;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+.container h1 {
+  font-weight: 400;
+  font-size: 20px;
+  text-align: center;
+  margin: 10px 0px;
+}
+
+#treeview {
+  width: 300px;
+  background-color: white;
+  height: 500px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  overflow: scroll;
+}
+
+#treeview .item  {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+#treeview .item:hover {
+  background-color: #f3f3f3;
+}
+
+#actions {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#actions .right {
+  display: flex;
+}
+
+#actions button {
+  cursor: pointer;
+}
+
+#filter #filter_text_field {
+  width: 100%;
+}
+
+#treeview-list .arrow-down, #treeview-list .arrow-up {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #333;
+  cursor: pointer;
+}
+
+.arrow-up {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #333;
+  cursor: pointer;
+}
+
+.arrow-down-medium {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 15px solid #333;
+  cursor: pointer;
+}
+
+.arrow-up-medium {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid #333;
+  cursor: pointer;
+}
