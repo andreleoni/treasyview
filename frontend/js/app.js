@@ -1,38 +1,110 @@
-var app = angular.module("treasyViewApp", []);
+var app = angular.module("treasyViewApp", ['ui.tree']);
 
 app.controller('mainController', function($http) {
+  delete $http.defaults.headers.common['X-Requested-With'];
+
   var mc = this;
+  this.query = "";
+
   mc.items = [];
+  this.items = [
+    {
+      "id": 1,
+      "title": "node1",
+      "nodes": [
+        {
+          "id": 11,
+          "title": "node1.1",
+          "nodes": [
+            {
+              "id": 111,
+              "title": "node1.1.1",
+              "nodes": []
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "title": "node1.2",
+          "nodes": []
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "node2",
+      "nodrop": true,
+      "nodes": [
+        {
+          "id": 21,
+          "title": "node2.1",
+          "nodes": []
+        },
+        {
+          "id": 22,
+          "title": "node2.2",
+          "nodes": []
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "node3",
+      "nodes": [
+        {
+          "id": 31,
+          "title": "node3.1",
+          "nodes": []
+        }
+      ]
+    }
+  ]
 
-  $http.get('http://localhost:3000/items', { format: 'json' }).then(function(response) {
-    var items = response.data;
-    mc.items = response.data;
+  this.treeviewItemCreate = function(scope) {
+    if (scope == "new") {
+      this.items.push({
+        id: 200,
+        title: "Novo",
+        nodes: []
+      })
 
-    items.map(function(item, key) {
-      items[key].parents = mc.getTreeviewFathers(item);
-    });
-
-    mc.items = items;
-  });
-
-  this.treeviewItemCreate = function() {
-    alert("create_new");
+    } else {
+      var nodeData = scope.$modelValue;
+      nodeData.nodes.push({
+        id: nodeData.id * 10 + nodeData.nodes.length,
+        title: nodeData.title + '.' + (nodeData.nodes.length + 1),
+        nodes: []
+      });
+    }
   }
 
-  this.treeviewItemEdit = function() {
-    alert("edit");
+  this.treeviewItemEdit = function(scope) {
+    var scope_id = scope.$modelValue.id;
+    $('.item-edit-' + scope_id).show();
+    $('.actions-item-' + scope_id).hide();
+    $('.confirm-edit-' + scope_id).show();
+    $('.item-title-' + scope_id).hide();
+
   }
 
-  this.treeviewItemDelete = function() {
-    alert("delete");
+  this.treeviewItemConfirmEdit = function(scope) {
+    var scope_id = scope.$modelValue.id;
+    $('.item-edit-' + scope_id).hide();
+    $('.actions-item-' + scope_id).show();
+    $('.confirm-edit-' + scope_id).hide();
+    $('.item-title-' + scope_id).show();
   }
 
-  this.treeviewItemCollapseAll = function() {
-    alert("collapseall");
+  this.treeviewItemDelete = function(scope) {
+    remove(scope);
   }
 
-  this.treeviewItemExpandAll = function() {
-    alert("expandall");
+  this.collapseAll = function() {
+    this.$broadcast('angular-ui-tree:collapse-all');
+  }
+
+  this.expandAll = function() {
+    this.$broadcast('angular-ui-tree:expand-all');
   }
 
   this.getTreeviewFathers = function(item) {
@@ -73,4 +145,8 @@ app.controller('mainController', function($http) {
 
     return parents.reverse();
   }
+
+  this.visible = function (item) {
+    return !(this.query && this.query.length > 0 && item.title.indexOf(this.query) == -1);
+  };
 });

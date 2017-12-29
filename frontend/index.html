@@ -5,7 +5,9 @@
     <title>treasyview</title>
     <link href="css/reset.css" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />
+    <link href="css/angular-ui-tree.css" rel="stylesheet" />
   </head>
+
   <body ng-controller="mainController as mc">
     <div class="container">
       <h1 class="text-center">treasyview</h1>
@@ -13,38 +15,61 @@
       <div id="treeview">
         <div id="actions">
           <div class="left">
-            <button ng-click="mc.treeviewItemCreate()"> New </button>
-            <button ng-click="mc.treeviewItemEdit()"> Edit </button>
-            <button ng-click="mc.treeviewItemDelete()"> Delete </button>
+            <button ng-click="mc.treeviewItemCreate('new')"> New </button>
           </div>
 
           <div class="right">
-            <div class="arrow-up-medium" ng-click="mc.treeviewItemCollapseAll()"> </div>
-            <div class="arrow-down-medium" ng-click="mc.treeviewItemExpandAll()"> </div>
+            <div class="arrow-up-medium" ng-click="mc.collapseAll();"> </div>
+            <div class="arrow-down-medium" ng-click="mc.expandAll();"> </div>
           </div>
         </div>
 
         <div id="filter">
-            <input type="text" placeholder="Filter..." id="filter_text_field" ng-model="mc.search.title">
+            <input type="text" id="filter_text_field" ng-model="mc.query" placeholder="Filter...">
         </div>
 
-        <div id="treeview-list">
-          <ul ng-repeat="item in mc.items | filter: mc.search">
-            <li id={{item.id}} class="item">
-              <span ng-repeat="space in item.parents">
-                &nbsp;&nbsp;
-              </span>
-
-              <div class="{{item.collapsed ? 'arrow-up' : 'arrow-down'}}"></div>
-              {{item.title}}
-            </li>
-          </ul>
+        <div ui-tree data-nodrop-enabled="true" data-drag-enabled="false" id="treeview-list">
+          <ol ui-tree-nodes="" ng-model="mc.items">
+            <li ng-repeat="item in mc.items" ui-tree-node ng-include="'nodes_renderer.html'" ng-show="mc.visible(item)"></li>
+          </ol>
         </div>
-
       </div>
     </div>
 
+    <script type="text/ng-template" id="nodes_renderer.html">
+      <div ui-tree-handle class="tree-node tree-node-content">
+        <a class="btn" ng-if="item.nodes && item.nodes.length > 0" data-nodrag ng-click="toggle(this)">
+          <span ng-class="{'arrow-up': collapsed, 'arrow-down': !collapsed }"> </span>
+        </a>
+
+        <span class="item-title-{{item.id}}"> {{item.title}} </span>
+        <input class="item-edit-{{item.id}} hidden" type="text" ng-model="item.title"> </input>
+        <button class="confirm-edit-{{item.id}} hidden" ng-click="mc.treeviewItemConfirmEdit(this)"> C </button>
+
+        <div class="actions-item actions-item-{{item.id}}">
+          <a class="btn green" data-nodrag ng-click="mc.treeviewItemCreate(this)">
+            <span> + </span>
+          </a>
+
+          <a class="btn blue" data-nodrag ng-click="mc.treeviewItemEdit(this)">
+            <span> e </span>
+          </a>
+
+          <a class="btn red" data-nodrag ng-click="remove(this)">
+            <span> - </span>
+          </a>
+        </div>
+      </div>
+
+      <ol ui-tree-nodes="" ng-model="item.nodes" ng-class="{hidden: collapsed}">
+        <li ng-repeat="item in item.nodes" ui-tree-node ng-include="'nodes_renderer.html'" ng-show="mc.visible(item)">
+        </li>
+      </ol>
+    </script>
+
     <script src="js/lib/angular.min.js" charset="utf-8"> </script>
+    <script src="js/lib/angular-ui-tree.min.js" charset="utf-8"> </script>
+    <script src="js/lib/jquery-3.2.1.min.js" charset="utf-8"> </script>
     <script src="js/app.js" charset="utf-8"> </script>
   </body>
 </html>
