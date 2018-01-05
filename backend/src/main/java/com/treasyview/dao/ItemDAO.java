@@ -12,8 +12,6 @@ public class ItemDAO {
 	
 	public static List<Item> findAllWithHierarchy() {
        List<Item> items = em.createQuery("FROM Item").getResultList();
-       em.close();
-       
        return items;           	   
 	}
 	

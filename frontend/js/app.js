@@ -7,58 +7,12 @@ app.controller('mainController', function($http) {
   this.query = "";
 
   mc.items = [];
-  this.items = [
-    {
-      "id": 1,
-      "title": "node1",
-      "nodes": [
-        {
-          "id": 11,
-          "title": "node1.1",
-          "nodes": [
-            {
-              "id": 111,
-              "title": "node1.1.1",
-              "nodes": []
-            }
-          ]
-        },
-        {
-          "id": 12,
-          "title": "node1.2",
-          "nodes": []
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "title": "node2",
-      "nodrop": true,
-      "nodes": [
-        {
-          "id": 21,
-          "title": "node2.1",
-          "nodes": []
-        },
-        {
-          "id": 22,
-          "title": "node2.2",
-          "nodes": []
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "title": "node3",
-      "nodes": [
-        {
-          "id": 31,
-          "title": "node3.1",
-          "nodes": []
-        }
-      ]
-    }
-  ]
+  $http.get(base_url + '/items', { format: 'json' }).then(function(response) {
+    var items = response.data;
+    mc.items = this.itemsToTree(items);
+    console.log(mc.items)
+  }.bind(this));
+
 
   this.treeviewItemCreate = function(scope) {
     if (scope == "new") {
@@ -100,50 +54,35 @@ app.controller('mainController', function($http) {
   }
 
   this.collapseAll = function() {
-    // this.$broadcast('angular-ui-tree:collapse-all');
+    this.$broadcast('angular-ui-tree:collapse-all');
   }
 
   this.expandAll = function() {
-    // this.$broadcast('angular-ui-tree:expand-all');
+    this.$broadcast('angular-ui-tree:expand-all');
   }
 
-  this.getTreeviewFathers = function(item) {
-    var items = mc.items;
-    var parents = [];
-    var have_a_parent_id;
-    var parent_id;
-    var counter = 0;
+  this.itemsToTree = function(items) {
+    var map = {};
+    var node;
+    var tree_items = [];
+    var i;
 
-    parent_id = item.parent_id;
-
-    if (isNaN(parent_id) || parent_id == null) {
-      return parents;
-    } else {
-      do {
-        counter = counter + 1;
-
-        for(current_item in items) {
-          have_a_parent_id = false;
-
-          if (parent_id == items[current_item].id) {
-            have_a_parent_id = true;
-
-            if (parents.indexOf(parent_id) == -1) {
-              parents.push(parent_id);
-              parent_id = items[current_item].parent_id;
-            } else {
-              parent_id = undefined;
-            }
-
-            break;
-          }
-        }
-
-        if (items.length <= counter) have_a_parent_id = false;
-      } while (have_a_parent_id != false);
+    for (i = 0; i < items.length; i += 1) {
+      map[items[i].id] = i;
+      items[i].nodes = [];
     }
 
-    return parents.reverse();
+    for (i = 0; i < items.length; i += 1) {
+      node = items[i];
+
+      if (node.parent_id !== 0) {
+        items[map[node.parent_id]].nodes.push(node);
+      } else {
+        tree_items.push(node);
+      }
+    }
+
+    return tree_items;
   }
 
   this.visible = function (item) {
