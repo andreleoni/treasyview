@@ -1,6 +1,6 @@
 var app = angular.module("treasyViewApp", ['ui.tree']);
 
-app.controller('mainController', function($http) {
+app.controller('mainController', function($scope, $http) {
   delete $http.defaults.headers.common['X-Requested-With'];
 
   var mc = this;
@@ -22,7 +22,7 @@ app.controller('mainController', function($http) {
     if (scope == "new") {
       $http.post(base_url + '/items?title=' + default_item_title )
         .then(function(response) {
-          $.notify("Changed successfully", "success");
+          $.notify("Created successfully", "success");
 
           this.items.push({
             id: response.data.id,
@@ -31,7 +31,7 @@ app.controller('mainController', function($http) {
           });
 
         }.bind(this), function() {
-          $.notify("Error on change", "error");
+          $.notify("Error on create", "error");
         });
 
     } else {
@@ -39,7 +39,7 @@ app.controller('mainController', function($http) {
 
       $http.post(base_url + '/items?title=' + default_item_title + '&parent_id=' + nodeData.id)
         .then(function(response) {
-          $.notify("Changed successfully", "success");
+          $.notify("Created successfully", "success");
 
           nodeData.nodes.push({
             id: response.data.id,
@@ -48,7 +48,7 @@ app.controller('mainController', function($http) {
           });
 
         }.bind(this), function() {
-          $.notify("Error on change", "error");
+          $.notify("Error on create", "error");
         });
     }
   }
@@ -89,11 +89,11 @@ app.controller('mainController', function($http) {
   }
 
   this.collapseAll = function() {
-    this.$broadcast('angular-ui-tree:collapse-all');
+    $scope.$broadcast('angular-ui-tree:collapse-all');
   }
 
   this.expandAll = function() {
-    this.$broadcast('angular-ui-tree:expand-all');
+    $scope.$broadcast('angular-ui-tree:expand-all');
   }
 
   this.itemsToTree = function(items) {
