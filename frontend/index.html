@@ -56,7 +56,7 @@
             <h1> Edit Item </h1>
 
             <div class="form-group">
-              <span class="item-title-{{item.id}}"> Title: </span>
+              <span class="item-title-{{item.id}}"> Title:* </span>
               <input class="item-title-edit-{{item.id}}" type="text" ng-model="item.title"> </input>
             </div>
 
@@ -72,7 +72,7 @@
         </div>
 
         <div class="actions-item actions-item-{{item.id}}">
-          <a title="New" class="btn green" data-nodrag ng-click="mc.treeviewItemCreate(this)">
+          <a title="New Child" class="btn green" data-nodrag ng-click="mc.treeviewItemCreate(this)">
             <i class="fa fa-plus fa-lg"> </i>
           </a>
 
