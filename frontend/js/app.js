@@ -11,7 +11,7 @@ app.controller('mainController', function($scope, $http) {
     var items = response.data;
     mc.items = this.itemsToTree(items);
   }.bind(this), function() {
-    $.notify("Server not running, or an error ocurred.", "error");
+    $.notify("Server not running, or an error ocurred.", { globalPosition: 'bottom right', className: 'error' });
   });
 
 
@@ -21,7 +21,7 @@ app.controller('mainController', function($scope, $http) {
     if (scope == "new") {
       $http.post(base_url + '/items?title=' + default_item_title )
         .then(function(response) {
-          $.notify("Created successfully", "success");
+          $.notify("Created successfully", { globalPosition: 'bottom right', className: 'success' });
 
           this.items.push({
             id: response.data.id,
@@ -30,7 +30,7 @@ app.controller('mainController', function($scope, $http) {
           });
 
         }.bind(this), function() {
-          $.notify("Error on create", "error");
+          $.notify("Error on create", { globalPosition: 'bottom right', className: 'error' });
         });
 
     } else {
@@ -38,7 +38,7 @@ app.controller('mainController', function($scope, $http) {
 
       $http.post(base_url + '/items?title=' + default_item_title + '&parent_id=' + nodeData.id)
         .then(function(response) {
-          $.notify("Created successfully", "success");
+          $.notify("Created successfully", { globalPosition: 'bottom right', className: 'success' });
 
           nodeData.nodes.push({
             id: response.data.id,
@@ -47,7 +47,7 @@ app.controller('mainController', function($scope, $http) {
           });
 
         }.bind(this), function() {
-          $.notify("Error on create", "error");
+          $.notify("Error on create", { globalPosition: 'bottom right', className: 'error' });
         });
     }
   }
@@ -67,22 +67,24 @@ app.controller('mainController', function($scope, $http) {
 
     $http.put(base_url + '/items/' + scope_id + '?title=' + title + '&description=' + description , data)
       .then(function(response) {
-        $.notify("Changed successfully", "success");
+        $.notify("Changed successfully", { globalPosition: 'bottom right', className: 'success' });
       }.bind(this), function() {
-        $.notify("Error on change", "error");
+        $.notify("Error on change", { globalPosition: 'bottom right', className: 'error' });
       });
   }
 
   this.treeviewItemDelete = function(scope, callback) {
-    var item_id = scope.$modelValue.id;
+    if (confirm("Are you sure?")) {
+      var item_id = scope.$modelValue.id;
 
-    $http.delete(base_url + '/items/' + item_id)
-      .then(function(response) {
-        $.notify("Deleted successfully", "success");
-        callback(scope);
-      }.bind(this), function() {
-        $.notify("Error on delete", "error");
-      });
+      $http.delete(base_url + '/items/' + item_id)
+        .then(function(response) {
+          $.notify("Deleted successfully", { globalPosition: 'bottom right', className: 'success' });
+          callback(scope);
+        }.bind(this), function() {
+          $.notify("Error on delete", { globalPosition: 'bottom right', className: 'error' });
+        });
+    }
   }
 
   this.collapseAll = function() {
