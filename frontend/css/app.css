@@ -207,6 +207,10 @@ body {
   box-shadow: 5px 10px 8px #888888;
 }
 
+.form-group {
+  margin-top: 10px;
+}
+
 .form-group span {
   font-size: 12px;
 }
@@ -217,6 +221,11 @@ body {
 
 .action-btns {
   text-align: right;
+  margin-top: 10px;
+}
+
+.action-btns button {
+  padding: 5px 10px;
 }
 
 .item-description {
