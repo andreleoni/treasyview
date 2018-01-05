@@ -1,10 +1,10 @@
 body {
   background-color: #f3f3f3;
+  font-family: Helvetica, Arial, Sans-Serif;
 }
 
 .container {
   margin: 0 auto;
-  max-width: 500px;
 }
 
 .container h1 {
@@ -14,14 +14,21 @@ body {
   margin: 10px 0px;
 }
 
+.container .principal-title {
+  background-color: #a0ce4e;
+  color: white;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #treeview {
-  width: 300px;
+  min-width: 300px;
   background-color: white;
-  height: 500px;
   margin: 0 auto;
   border: 1px solid #ccc;
   overflow-x: scroll;
-  overflow-y: hidden;
   box-sizing: border-box;
 }
 
@@ -44,8 +51,29 @@ body {
   justify-content: space-between;
 }
 
-#actions .right {
-  display: flex;
+#actions .right i {
+  cursor: pointer;
+}
+
+#actions .new-item, .edit-item-form button {
+  background: #a0ce4e;
+  text-transform: uppercase;
+  color: #fff;
+  transition: all .2s;
+  border-width: 0;
+  border-style: solid;
+  border-color: #fff;
+  border-radius: 2px;
+  -webkit-transition: all .2s;
+  -moz-transition: all .2s;
+  -ms-transition: all .2s;
+  -o-transition: all .2s;
+  -webkit-border-radius: 2px;
+  padding: 10px 20px;
+}
+
+#actions .new-item:hover {
+  background-color: #96c346;
 }
 
 #actions button {
@@ -57,47 +85,9 @@ body {
 }
 
 #filter #filter_text_field {
-  width: 100%;
-}
-
-#treeview-list .arrow-down, #treeview-list .arrow-up {
-  display: inline-block;
-}
-
-.arrow-down {
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid #333;
-  cursor: pointer;
-}
-
-.arrow-up {
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 5px solid #333;
-  cursor: pointer;
-}
-
-.arrow-down-medium {
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-top: 15px solid #333;
-  cursor: pointer;
-}
-
-.arrow-up-medium {
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-bottom: 15px solid #333;
-  cursor: pointer;
+  width: calc(100% - 24px);
+  padding: 5px;
+  margin: 5px;
 }
 
 .hidden {
@@ -115,31 +105,66 @@ body {
   cursor: pointer;
   border-radius: 5px;
   text-align: center;
+  font-size: 9px;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .blue {
-  background-color: #008CBA;
+  background-color: #4e93ce;
+  color: white;
+}
+
+.blue:hover {
+  background-color: #4b99dc;
 }
 
 .red {
-  background-color: #f44336;
+  background-color: #ce4e4e;
+  color: white;
+}
+
+.red:hover {
+  background-color: #d23f3f;
+}
+
+.collapse-expand {
+  cursor: pointer;
 }
 
 .green {
-  background-color: #4CAF50;
+  background-color: #a0ce4e;
+  color: white;
+}
+
+.green:hover {
+  background-color: #96c346;
 }
 
 .actions-item {
   position: absolute;
   right: 5px;
   top: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 70px;
 }
 
 .tree-node-content {
-  background-color: #e9e9e9;
-  border-radius: 1px;
-  border: 1px solid #d9d9d9;
-  padding: 5px 60px 5px 5px;
+  padding: 5px 80px 5px 5px;
+  margin-bottom: 4px;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: 100 !important;
+}
+
+.tree-node-content:hover {
+  background-color: #f2f2f2;
 }
 
 .angular-ui-tree-handle {
@@ -151,7 +176,35 @@ body {
 }
 
 .edit-item-form {
+  position: fixed;
+  z-index: 101;
   width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+}
+
+.background-fake {
+  background-color: black;
+  z-index: 100;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+}
+
+.edit-item-form .content {
+  position: fixed;
+  margin: 0 auto;
+  display: inline-block;
+  z-index: 102;
+  width: 215px;
+  height: 123px;
+  top: calc(50% - 215px);
+  right: calc(50% - 125px);
+  background-color: white;
+  padding: 20px;
+  box-shadow: 5px 10px 8px #888888;
 }
 
 .form-group span {
@@ -169,4 +222,22 @@ body {
 .item-description {
   font-size: 12px;
   cursor: default;
+}
+
+.angular-ui-tree-nodes {
+  border-left: 1px solid #f3f3f3;
+}
+
+.collapse-expand {
+  font-size: 10px;
+  margin: auto 0;
+  vertical-align: text-bottom;
+}
+
+.fa-minus-square, .fa-plus-square {
+  color: #c3c3c3;
+}
+
+.fa-minus-square:hover, .fa-plus-square:hover {
+  color: #a3a3a3;
 }

@@ -10,7 +10,6 @@ app.controller('mainController', function($scope, $http) {
   $http.get(base_url + '/items', { format: 'json' }).then(function(response) {
     var items = response.data;
     mc.items = this.itemsToTree(items);
-    console.log(mc.items)
   }.bind(this), function() {
     $.notify("Server not running, or an error ocurred.", "error");
   });
@@ -56,13 +55,11 @@ app.controller('mainController', function($scope, $http) {
   this.treeviewItemEdit = function(scope) {
     var scope_id = scope.$modelValue.id;
     $('.edit-item-' + scope_id).show();
-    $('.actions-item-' + scope_id).hide();
   }
 
   this.treeviewItemConfirmEdit = function(scope, parent_id) {
     var scope_id = scope.$modelValue.id;
     $('.edit-item-' + scope_id).hide();
-    $('.actions-item-' + scope_id).show();
 
     var title = scope.$modelValue.title;
     var description = scope.$modelValue.description;
@@ -111,7 +108,7 @@ app.controller('mainController', function($scope, $http) {
       node = items[i];
 
       if (node.parent_id !== 0) {
-        items[map[node.parent_id]].nodes.push(node);
+        if (items[map[node.parent_id]] != undefined) items[map[node.parent_id]].nodes.push(node);
       } else {
         tree_items.push(node);
       }
@@ -121,6 +118,7 @@ app.controller('mainController', function($scope, $http) {
   }
 
   this.visible = function (item) {
-    return !(this.query && this.query.length > 0 && item.title.indexOf(this.query) == -1);
+    return !(this.query && this.query.length > 0 &&
+      item.title.indexOf(this.query) == -1);
   };
 });
