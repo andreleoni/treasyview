@@ -100,11 +100,11 @@ app.controller('mainController', function($http) {
   }
 
   this.collapseAll = function() {
-    this.$broadcast('angular-ui-tree:collapse-all');
+    // this.$broadcast('angular-ui-tree:collapse-all');
   }
 
   this.expandAll = function() {
-    this.$broadcast('angular-ui-tree:expand-all');
+    // this.$broadcast('angular-ui-tree:expand-all');
   }
 
   this.getTreeviewFathers = function(item) {
