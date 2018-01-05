@@ -3,6 +3,7 @@ package com.treasyview.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import com.treasyview.models.Item;
 import com.treasyview.util.JPAUtil;
@@ -20,8 +21,7 @@ public class ItemDAO {
        
        em.persist(item);
        
-       em.getTransaction().commit();
-	   em.close();
+       em.getTransaction().commit();	   
        
        return item;
 	}	
@@ -33,8 +33,7 @@ public class ItemDAO {
 	   item.setTitle(title);
 	   item.setDescription(description);
 	   
-	   em.getTransaction().commit();
-	   em.close();
+	   em.getTransaction().commit();	   
 	   
 	   return item;
 	}
@@ -45,8 +44,11 @@ public class ItemDAO {
 	   Item item = em.find(Item.class, itemId);
 	   em.remove(item);
 	   
-	   em.getTransaction().commit();
-	   em.close();	   
+	   Query query = em.createQuery("delete Item where parent_id = :parent_id");
+	   query.setParameter("parent_id", itemId);
+       query.executeUpdate();
+   
+	   em.getTransaction().commit();	   
 	}
 	
 	private static void startTransaction() {

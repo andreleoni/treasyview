@@ -11,46 +11,81 @@ app.controller('mainController', function($http) {
     var items = response.data;
     mc.items = this.itemsToTree(items);
     console.log(mc.items)
-  }.bind(this));
+  }.bind(this), function() {
+    $.notify("Server not running, or an error ocurred.", "error");
+  });
 
 
   this.treeviewItemCreate = function(scope) {
+    var default_item_title = "New item";
+
     if (scope == "new") {
-      this.items.push({
-        id: 200,
-        title: "Novo",
-        nodes: []
-      })
+      $http.post(base_url + '/items?title=' + default_item_title )
+        .then(function(response) {
+          $.notify("Changed successfully", "success");
+
+          this.items.push({
+            id: response.data.id,
+            title: default_item_title,
+            nodes: []
+          });
+
+        }.bind(this), function() {
+          $.notify("Error on change", "error");
+        });
 
     } else {
       var nodeData = scope.$modelValue;
-      nodeData.nodes.push({
-        id: nodeData.id * 10 + nodeData.nodes.length,
-        title: nodeData.title + '.' + (nodeData.nodes.length + 1),
-        nodes: []
-      });
+
+      $http.post(base_url + '/items?title=' + default_item_title + '&parent_id=' + nodeData.id)
+        .then(function(response) {
+          $.notify("Changed successfully", "success");
+
+          nodeData.nodes.push({
+            id: response.data.id,
+            title: default_item_title,
+            nodes: []
+          });
+
+        }.bind(this), function() {
+          $.notify("Error on change", "error");
+        });
     }
   }
 
   this.treeviewItemEdit = function(scope) {
     var scope_id = scope.$modelValue.id;
-    $('.item-edit-' + scope_id).show();
+    $('.edit-item-' + scope_id).show();
     $('.actions-item-' + scope_id).hide();
-    $('.confirm-edit-' + scope_id).show();
-    $('.item-title-' + scope_id).hide();
-
   }
 
-  this.treeviewItemConfirmEdit = function(scope) {
+  this.treeviewItemConfirmEdit = function(scope, parent_id) {
     var scope_id = scope.$modelValue.id;
-    $('.item-edit-' + scope_id).hide();
+    $('.edit-item-' + scope_id).hide();
     $('.actions-item-' + scope_id).show();
-    $('.confirm-edit-' + scope_id).hide();
-    $('.item-title-' + scope_id).show();
+
+    var title = scope.$modelValue.title;
+    var description = scope.$modelValue.description;
+    var data = { title: title, description: description };
+
+    $http.put(base_url + '/items/' + scope_id + '?title=' + title + '&description=' + description , data)
+      .then(function(response) {
+        $.notify("Changed successfully", "success");
+      }.bind(this), function() {
+        $.notify("Error on change", "error");
+      });
   }
 
-  this.treeviewItemDelete = function(scope) {
-    remove(scope);
+  this.treeviewItemDelete = function(scope, callback) {
+    var item_id = scope.$modelValue.id;
+
+    $http.delete(base_url + '/items/' + item_id)
+      .then(function(response) {
+        $.notify("Deleted successfully", "success");
+        callback(scope);
+      }.bind(this), function() {
+        $.notify("Error on delete", "error");
+      });
   }
 
   this.collapseAll = function() {

@@ -9,6 +9,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
@@ -28,12 +29,13 @@ public class ItemResource {
    @POST
    @Path("/")
    @Produces(value = { MediaType.APPLICATION_JSON })
-   public Item create(@FormParam("parent_id") int parentId, 
-		   @FormParam("title") String title, 
-		   @FormParam("description") String description) {
+   public Item create(@QueryParam("parent_id") int parentId, 
+		   @QueryParam("title") String title, 
+		   @QueryParam("description") String description) {
 	   	   
    	   Item item = new Item();
    	   
+   	   System.out.println(title);
    	   item.setTitle(title);   	   
        item.setParent_id(parentId);       
        item.setDescription(description);
@@ -45,8 +47,8 @@ public class ItemResource {
    @Path("/{itemId}")
    @Produces(value = { MediaType.APPLICATION_JSON })
    public Item update(@PathParam("itemId") int itemId,
-		   @FormParam("title") String title, 
-		   @FormParam("description") String description) {	   	  
+		   @QueryParam("title") String title, 
+		   @QueryParam("description") String description) {	   	  
 	   
 	   return ItemDAO.update(itemId, title, description);
    }

@@ -5,7 +5,7 @@
     <title>treasyview</title>
     <link href="css/reset.css" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />
-    <link href="css/angular-ui-tree.css" rel="stylesheet" />
+    <link href="css/lib/angular-ui-tree.css" rel="stylesheet" />
   </head>
 
   <body ng-controller="mainController as mc">
@@ -42,9 +42,24 @@
           <span ng-class="{'arrow-up': collapsed, 'arrow-down': !collapsed }"> </span>
         </a>
 
-        <span class="item-title-{{item.id}}"> {{item.title}} </span>
-        <input class="item-edit-{{item.id}} hidden" type="text" ng-model="item.title"> </input>
-        <button class="confirm-edit-{{item.id}} hidden" ng-click="mc.treeviewItemConfirmEdit(this)"> C </button>
+        <span class="item-title-{{item.id}}" title="{{item.title}}"> {{item.title | limitTo: 20 }}{{item.title.length > 20 ? '...' : ''}}  </span>
+        <div class="item-description item-title-{{item.id}}" title="{{item.description}}"> {{item.description | limitTo: 35 }}{{item.description.length > 60 ? '...' : ''}} </div>
+
+        <div class="edit-item-form edit-item-{{item.id}} hidden" >
+          <div class="form-group">
+            <span class="item-title-{{item.id}}"> Title: </span>
+            <input class="item-title-edit-{{item.id}}" type="text" ng-model="item.title"> </input>
+          </div>
+
+          <div class="form-group">
+            <span class="item-description-{{item.id}}"> Description:  </span>
+            <input class="item-description-edit-{{item.id}}" type="text" ng-model="item.description"> </input>
+          </div>
+
+          <div class="form-group action-btns">
+            <button class="confirm-edit-{{item.id}}" ng-click="mc.treeviewItemConfirmEdit(this)"> Salvar </button>
+          </div>
+        </div>
 
         <div class="actions-item actions-item-{{item.id}}">
           <a class="btn green" data-nodrag ng-click="mc.treeviewItemCreate(this)">
@@ -55,7 +70,7 @@
             <span> e </span>
           </a>
 
-          <a class="btn red" data-nodrag ng-click="remove(this)">
+          <a class="btn red" data-nodrag ng-click="mc.treeviewItemDelete(this, remove)">
             <span> - </span>
           </a>
         </div>
@@ -70,6 +85,7 @@
     <script src="js/lib/angular.min.js" charset="utf-8"> </script>
     <script src="js/lib/angular-ui-tree.min.js" charset="utf-8"> </script>
     <script src="js/lib/jquery-3.2.1.min.js" charset="utf-8"> </script>
+    <script src="js/lib/notify.min.js" charset="utf-8"> </script>
     <script src="js/app.js" charset="utf-8"> </script>
     <script src="js/configs/development.js" charset="utf-8"> </script>
   </body>
