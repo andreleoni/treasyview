@@ -1,6 +1,5 @@
 app.controller('itemController', function($scope, $http, itemService, itemHelper) {
   var mc = this;
-  mc.items = [];
 
   $http.get(base_url + '/items', { format: 'json' }).then(function(response) {
     var items = response.data;
@@ -89,9 +88,10 @@ app.controller('itemController', function($scope, $http, itemService, itemHelper
 
   this.treeviewItemDelete = function(scope, callback) {
     if (confirm("Are you sure?")) {
-      var item_id = scope.$modelValue.id;
+      var item = scope.$modelValue;
+      var item_id = item.id;
 
-      $http.delete(base_url + '/items/' + item_id)
+      $http.delete(base_url + '/items/' + item_id + "?childrens_ids=" + itemService.getAllChildrensIds(item))
         .then(function(response) {
           $.notify("Deleted successfully", { globalPosition: 'bottom right', className: 'success' });
           callback(scope);

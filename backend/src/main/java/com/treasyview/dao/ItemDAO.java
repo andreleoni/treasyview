@@ -43,13 +43,13 @@ public class ItemDAO {
 		   
 	   Item item = em.find(Item.class, itemId);
 	   em.remove(item);
-	   
+	   	   
+	   List<Item> items = em.createQuery("FROM Item").getResultList();
 	   Query query = em.createQuery("delete Item where parent_id = :parent_id");
 	   query.setParameter("parent_id", itemId);
        query.executeUpdate();
    
-	   em.getTransaction().commit();	
-	   
+	   em.getTransaction().commit();		   
 	}
 	
 	private static void startTransaction() {

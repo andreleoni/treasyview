@@ -24,7 +24,7 @@ public class ItemResource {
   @GET
   @Path("/")
   @Produces(value = { MediaType.APPLICATION_JSON })
-  public Response listItems() {
+  public Response listItems() {	 
 	  try {
 	    List<Item> items = ItemDAO.findAllWithHierarchy();
 	    

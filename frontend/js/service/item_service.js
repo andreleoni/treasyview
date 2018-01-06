@@ -22,6 +22,12 @@ app.factory('itemService', function() {
       }
 
       return tree_items;
+    },
+
+    getAllChildrensIds: function (item) {
+      var childrens = [];
+      childrens.push(item.nodes.id);
+      return childrens;
     }
   }
 });
