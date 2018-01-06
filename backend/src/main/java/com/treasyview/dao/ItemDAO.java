@@ -48,7 +48,8 @@ public class ItemDAO {
 	   query.setParameter("parent_id", itemId);
        query.executeUpdate();
    
-	   em.getTransaction().commit();	   
+	   em.getTransaction().commit();	
+	   
 	}
 	
 	private static void startTransaction() {
