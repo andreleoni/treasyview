@@ -7,9 +7,10 @@
     <link href="css/app.css" rel="stylesheet" />
     <link href="css/lib/angular-ui-tree.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/lib/font-awesome/css/font-awesome.min.css">
+    <link href="css/lib/tooltipster.bundle.min.css" rel="stylesheet" />
   </head>
 
-  <body ng-controller="mainController as mc">
+  <body>
     <div class="container">
       <div class="principal-title">
         <h1 class="text-center">
@@ -17,10 +18,10 @@
         </h1>
       </div>
 
-      <div id="treeview">
+      <div id="treeview" ng-controller="itemController as mc">
         <div id="actions">
           <div class="left">
-            <button class="new-item" ng-click="mc.treeviewItemCreate('new')"> New </button>
+            <button class="new-item" ng-click="mc.treeviewItemCreate()"> New </button>
           </div>
 
           <div class="right">
@@ -30,7 +31,7 @@
         </div>
 
         <div id="filter">
-            <input type="text" id="filter_text_field" ng-model="mc.query" placeholder="Filter...">
+            <input type="text" id="filter_text_field" ng-model="searchText" placeholder="Filter...">
         </div>
 
         <div class="loading-tree">
@@ -39,7 +40,7 @@
 
         <div data-empty-placeholder-enabled="false" ui-tree data-nodrop-enabled="true" data-drag-enabled="false" id="treeview-list">
           <ol ui-tree-nodes="" ng-model="mc.items">
-            <li ng-repeat="item in mc.items" ui-tree-node ng-include="'nodes_renderer.html'" ng-show="mc.visible(item)"></li>
+            <li ng-repeat="item in mc.items | filter:searchText:strict" ui-tree-node ng-include="'nodes_renderer.html'"></li>
           </ol>
         </div>
       </div>
@@ -51,7 +52,15 @@
           <i ng-class="{'fa fa-lg fa-minus-square': collapsed, 'fa fa-lg fa-plus-square': !collapsed }"> </i>
         </a>
 
-        <span class="item-title-{{item.id}}" title="{{item.title}}"> {{item.title | limitTo: 20 }}{{item.title.length > 20 ? '...' : ''}}  </span>
+        <span class="tooltip item-title-{{item.id}}" data-tooltip-content="#tooltip_content_{{item.id}}"> {{item.title | limitTo: 20 }}{{item.title.length > 20 ? '...' : ''}}  </span>
+
+        <div class="tooltip_templates">
+          <span id="tooltip_content_{{item.id}}">
+            ID: {{item.id}} </br>
+            Title: {{item.title}} </br>
+            Description: {{item.description}} </br>
+          </span>
+        </div>
 
         <div class="edit-item-form edit-item-{{item.id}} hidden" >
           <div class="background-fake"> </div>
@@ -61,12 +70,12 @@
 
             <div class="form-group">
               <span class="item-title-{{item.id}}"> Title:* </span>
-              <input class="item-title-edit-{{item.id}}" type="text" ng-model="item.title"> </input>
+              <input maxlength="50" class="item-title-edit-{{item.id}}" type="text" ng-model="item.title"> </input>
             </div>
 
             <div class="form-group">
               <span class="item-description-{{item.id}}"> Description:  </span>
-              <input class="item-description-edit-{{item.id}}" type="text" ng-model="item.description"> </input>
+              <input maxlength="255" class="item-description-edit-{{item.id}}" type="text" ng-model="item.description"> </input>
             </div>
 
             <div class="action-btns">
@@ -76,7 +85,7 @@
         </div>
 
         <div class="actions-item actions-item-{{item.id}}">
-          <a title="New Child" class="btn green" data-nodrag ng-click="mc.treeviewItemCreate(this)">
+          <a title="New Child" class="btn green" data-nodrag ng-click="mc.treeviewItemCreateChild(this)">
             <i class="fa fa-plus fa-lg"> </i>
           </a>
 
@@ -100,7 +109,18 @@
     <script src="js/lib/angular-ui-tree.min.js" charset="utf-8"> </script>
     <script src="js/lib/jquery-3.2.1.min.js" charset="utf-8"> </script>
     <script src="js/lib/notify.min.js" charset="utf-8"> </script>
+    <script src="js/lib/tooltipster.bundle.min.js" charset="utf-8"> </script>
+
     <script src="js/app.js" charset="utf-8"> </script>
+    <script src="js/service/item_service.js" charset="utf-8"> </script>
+    <script src="js/helper/item_helper.js" charset="utf-8"> </script>
+    <script src="js/controller/item_controller.js" charset="utf-8"> </script>
     <script src="js/configs/development.js" charset="utf-8"> </script>
+
+    <script>
+      $(document).ready(function() {
+        $('.tooltip').tooltipster({ side: 'right' });
+      });
+    </script>
   </body>
 </html>

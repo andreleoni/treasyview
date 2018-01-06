@@ -260,3 +260,7 @@ body {
 .red-border {
   border: 1px solid red;
 }
+
+.tooltip_templates {
+  display: none;
+}
