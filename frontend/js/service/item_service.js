@@ -24,10 +24,12 @@ app.factory('itemService', function() {
       return tree_items;
     },
 
-    getAllChildrensIds: function (item) {
-      var childrens = [];
-      childrens.push(item.nodes.id);
-      return childrens;
+    notFiltering: function(query) {
+      return (!(query && query.length > 0));
+    },
+
+    isVisible: function(query, item) {
+      return (JSON.stringify(item).indexOf(query) > 0);
     }
   }
 });

@@ -31,7 +31,7 @@
         </div>
 
         <div id="filter">
-            <input type="text" id="filter_text_field" ng-model="searchText" placeholder="Filter...">
+          <input type="text" id="filter_text_field" ng-model="mc.query" placeholder="Filter...">
         </div>
 
         <div class="loading-tree">
@@ -40,7 +40,7 @@
 
         <div data-empty-placeholder-enabled="false" ui-tree data-nodrop-enabled="true" data-drag-enabled="false" id="treeview-list">
           <ol ui-tree-nodes="" ng-model="mc.items">
-            <li ng-repeat="item in mc.items | filter:searchText:strict" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+            <li ng-repeat="item in mc.items | filter:searchText:strict" ui-tree-node ng-include="'nodes_renderer.html'" ng-show="mc.visible(item)"></li>
           </ol>
         </div>
       </div>
@@ -100,7 +100,7 @@
       </div>
 
       <ol ui-tree-nodes="" ng-model="item.nodes" ng-class="{hidden: collapsed}">
-        <li ng-repeat="item in item.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
+        <li ng-repeat="item in item.nodes" ui-tree-node ng-include="'nodes_renderer.html'" ng-show="mc.visible(item)">
         </li>
       </ol>
     </script>
@@ -116,11 +116,5 @@
     <script src="js/helper/item_helper.js" charset="utf-8"> </script>
     <script src="js/controller/item_controller.js" charset="utf-8"> </script>
     <script src="js/configs/development.js" charset="utf-8"> </script>
-
-    <script>
-      $(document).ready(function() {
-        $('.tooltip').tooltipster({ side: 'right' });
-      });
-    </script>
   </body>
 </html>

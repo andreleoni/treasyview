@@ -1,6 +1,8 @@
 app.controller('itemController', function($scope, $http, itemService, itemHelper) {
   var mc = this;
 
+  mc.query = "";
+
   $http.get(base_url + '/items', { format: 'json' }).then(function(response) {
     var items = response.data;
     mc.items = itemService.itemsToTree(items);
@@ -91,7 +93,7 @@ app.controller('itemController', function($scope, $http, itemService, itemHelper
       var item = scope.$modelValue;
       var item_id = item.id;
 
-      $http.delete(base_url + '/items/' + item_id + "?childrens_ids=" + itemService.getAllChildrensIds(item))
+      $http.delete(base_url + '/items/' + item_id)
         .then(function(response) {
           $.notify("Deleted successfully", { globalPosition: 'bottom right', className: 'success' });
           callback(scope);
@@ -108,4 +110,12 @@ app.controller('itemController', function($scope, $http, itemService, itemHelper
   this.expandAll = function() {
     $scope.$broadcast('angular-ui-tree:expand-all');
   }
+
+  this.visible = function (item) {
+    var is_visible = true;
+
+    if (itemService.notFiltering(this.query)) return true;
+
+    return (itemService.isVisible(this.query, item));
+  };
 });
