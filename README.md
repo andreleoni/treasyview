@@ -18,7 +18,7 @@
 
 ### Preview
 
-[Screen_Shot_2018-01-06_at_22.43.15.png](https://postimg.org/image/5shaez72d/)
+[![Screen_Shot_2018-01-06_at_22.49.10.png](https://s18.postimg.org/3nwxe0nh5/Screen_Shot_2018-01-06_at_22.49.10.png)](https://postimg.org/image/u8zg9kpud/)
 
 ### Run the project with
 1 - Create the database with the name "treasyview" in MYSQL;
