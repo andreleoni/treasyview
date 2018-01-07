@@ -16,6 +16,9 @@
 * Notify.js
 * Tooltipster
 
+### Preview
+
+[Screen_Shot_2018-01-06_at_22.43.15.png](https://postimg.org/image/5shaez72d/)
 
 ### Run the project with
 1 - Create the database with the name "treasyview" in MYSQL;
