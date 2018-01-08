@@ -32,5 +32,4 @@
 4 - Open index page on "frontend" folder;
 
 ### Pendent Tasks: 
-* Do the filter by hierarchy;
 * Delete all childrens when delete a folder on treeview in backend (Today, is deleting only the first children);
