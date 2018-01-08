@@ -24,17 +24,17 @@ public class ItemResource {
   @GET
   @Path("/")
   @Produces(value = { MediaType.APPLICATION_JSON })
-  public Response listItems() {	 
-	  try {
-	    List<Item> items = ItemDAO.findAllWithHierarchy();
-	    
-	    String json = new Gson().toJson(items);    		
-	    return Response.ok(json, MediaType.APPLICATION_JSON).build();
-	    
-	  } catch (Exception e) {
-	    System.out.println(e);
-	    return Response.serverError().entity("An error ocurrend.").build();
-	  }
+  public Response listItems() {
+    try {
+      List<Item> items = ItemDAO.findAllWithHierarchy();
+
+      String json = new Gson().toJson(items);
+      return Response.ok(json, MediaType.APPLICATION_JSON).build();
+
+    } catch (Exception e) {
+      System.out.println(e);
+      return Response.serverError().entity("An error ocurrend.").build();
+    }
   }
 
   @POST
@@ -54,10 +54,10 @@ public class ItemResource {
       item.setParent_id(parentId);
       item.setDescription(description);
 
-      try {    	  
-    	  	String json = new Gson().toJson(ItemDAO.create(item));
-    	  	return Response.ok(json, MediaType.APPLICATION_JSON).build();
-        
+      try {
+        String json = new Gson().toJson(ItemDAO.create(item));
+        return Response.ok(json, MediaType.APPLICATION_JSON).build();
+
       } catch (Exception e) {
         System.out.println(e);
         return Response.serverError().entity("An error ocurrend.").build();
@@ -72,20 +72,20 @@ public class ItemResource {
       @QueryParam("title") String title,
       @QueryParam("description") String description) {
 
-	  if (ItemUtil.invalidFields(title, description)) {
-    		return Response.status(400).entity("Check field validations.").build();
-    
-	  } else {
-	      try {
-	    	  	String json = new Gson().toJson(ItemDAO.update(itemId, title, description));
-	  	  	return Response.ok(json, MediaType.APPLICATION_JSON).build();      	  
-	      
-	      } catch (Exception e) {
-	        System.out.println(e);
-	        return Response.serverError().entity("An error ocurrend.").build();
-	      }
-	  }
-  }  
+    if (ItemUtil.invalidFields(title, description)) {
+      return Response.status(400).entity("Check field validations.").build();
+
+    } else {
+        try {
+          String json = new Gson().toJson(ItemDAO.update(itemId, title, description));
+          return Response.ok(json, MediaType.APPLICATION_JSON).build();
+
+        } catch (Exception e) {
+          System.out.println(e);
+          return Response.serverError().entity("An error ocurrend.").build();
+        }
+    }
+  }
 
   @DELETE
   @Path("/{itemId}")

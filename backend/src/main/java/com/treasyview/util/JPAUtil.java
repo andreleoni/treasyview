@@ -6,10 +6,10 @@ import javax.persistence.Persistence;
 
 public class JPAUtil {
 
-	private static EntityManagerFactory entityManagerFactory = Persistence
-			.createEntityManagerFactory("treasyviewDefault");
+  private static EntityManagerFactory entityManagerFactory = Persistence
+      .createEntityManagerFactory("treasyviewDefault");
 
-	public EntityManager getEntityManager() {
-		return entityManagerFactory.createEntityManager();
-	}
+  public EntityManager getEntityManager() {
+    return entityManagerFactory.createEntityManager();
+  }
 }
