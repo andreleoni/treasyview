@@ -32,4 +32,4 @@
 4 - Open index page on "frontend" folder;
 
 ### Pendent Tasks: 
-* Delete all childrens when delete a folder on treeview in backend (Today, is deleting only the first children);
+* Adjust send POST file (Currently are sending by URL Query, and the correct is like Form of $http Angular Request)
